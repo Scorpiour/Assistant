@@ -19,7 +19,7 @@ void* __stdcall CreateCMDProc(void* initValuePtr)
 			}
 		case CREATE_MAIN_FORM:
 			{
-				MessageBox(NULL,L"Create Main Form!",APP_NAME,0);
+				//MessageBox(NULL,L"Create Main Form!",APP_NAME,0);
 				
 				break;
 			}

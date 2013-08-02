@@ -80,9 +80,11 @@
     <ClCompile Include="assistant.cpp" />
     <ClCompile Include="CmdQueue.cpp" />
     <ClCompile Include="mainForm.cpp" />
+    <ClCompile Include="server.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdQueue.h" />
+    <ClInclude Include="Communicate.h" />
     <ClInclude Include="mainForm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

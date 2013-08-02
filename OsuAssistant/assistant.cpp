@@ -1,5 +1,6 @@
 #include "mainForm.h"
 #include "CmdQueue.h"
+#include "Communicate.h"
 
 using namespace System;
 
@@ -9,10 +10,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	CmdQueue mainCmdQueue;
 	//vector<HANDLE> subThreadHandler;
 
+	//Initialize main command queue controler
 	pCmdLineInitializer CmdInitializer = new CmdLineInitializer;
 	CmdInitializer->pCmdQueue = &mainCmdQueue;
-
 	HANDLE cmdQueueHandler = CreateThread(NULL,(DWORD)NULL,(LPTHREAD_START_ROUTINE)CreateCMDProc,(void*)CmdInitializer,(DWORD)NULL,NULL);
+
+	//Initialize main communicate model
+	CmdInitializer = new CmdLineInitializer;
+	CmdInitializer->pCmdQueue = &mainCmdQueue;
+	HANDLE mainServerHandler = CreateThread(NULL,(DWORD)NULL,(LPTHREAD_START_ROUTINE)InitializeServerThread,(void*)CmdInitializer,(DWORD)NULL,NULL);
+
 
 	if(!mainCmdQueue.Enqueue_Back(CREATE_MAIN_FORM))
 	{
@@ -31,9 +38,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	mainWndEx.hInstance = hInstance;
 	mainWndEx.hIcon = LoadIcon(hInstance,MAKEINTRESOURCE(IDI_APPLICATION));
 	mainWndEx.hCursor = LoadCursor(NULL,IDC_ARROW);
-	mainWndEx.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1 );
+	mainWndEx.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
 	mainWndEx.lpszMenuName = nullptr;
-	mainWndEx.lpszClassName = APP_NAME;
+	mainWndEx.lpszClassName = MAINFORM_NAME;
 	mainWndEx.hIconSm = LoadIcon(mainWndEx.hInstance,MAKEINTRESOURCE(IDI_APPLICATION));
 
 	if(!RegisterClassEx(&mainWndEx))
@@ -63,7 +70,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	UpdateWindow(hWnd);
 
-	SendMessage(hWnd,0x4001,NULL,(LPARAM)(void*)(&mainCmdQueue));
+	SendMessage(hWnd,UPDATE_CMD_QUEUE,NULL,(LPARAM)(void*)(&mainCmdQueue));
 
 	MSG mainFormMsg;
 
@@ -111,12 +118,11 @@ LRESULT CALLBACK mainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 			//OnSize(hwnd,(UINT)wParam,width,height);
 			break;
 		}
-	case 0x4001:
+	case UPDATE_CMD_QUEUE:
 		{
 			if(nullptr==pCmdQueue)
 			{
 				pCmdQueue = (CmdQueue*)(void*)lParam;
-				MessageBox(nullptr,L"Update Command Queue Entry!",APP_NAME,0);
 			}
 			break;
 		}

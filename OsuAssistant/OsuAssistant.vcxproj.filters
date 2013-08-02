@@ -22,7 +22,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CmdQueue.cpp">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="server.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -30,6 +33,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CmdQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Communicate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
