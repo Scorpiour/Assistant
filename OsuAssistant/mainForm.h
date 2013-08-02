@@ -18,18 +18,14 @@ using namespace std;
 
 class CmdQueue;
 
+
 typedef struct newFormStruct
 {
-	HINSTANCE hInstance;
-	HINSTANCE hPrevInstance;
-	LPSTR lpCmdLine;
-	int nCmdShow;
-	HANDLE mainThreadSemaphore;
 	CmdQueue* pCmdQueue;
-}FormInitializer,*pFormInitializer;
+}CmdLineInitializer,*pCmdLineInitializer;
 
-void* __stdcall CreateNewFormThread(void*);
-int CALLBACK createNewForm(HINSTANCE,HINSTANCE,LPSTR,int);
+void* __stdcall CreateCMDProc(void*);
+
 LRESULT CALLBACK mainWndProc(HWND, UINT, WPARAM, LPARAM);
 
 const TCHAR APP_NAME[] = _T("osuAssistant");
