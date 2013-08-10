@@ -11,11 +11,23 @@ MyDealer::MyDealer(void*(*ptr)(void*))
 	}
 	else
 	{
-		throw L"Null Sub Thread Entry! You must provide a sub thread entry function to dealer, which prototype is :\nvoid* __stdcall dealerProc(void*) ";
+		pDealerProc = nullptr;
+		//throw L"Null Sub Thread Entry! You must provide a sub thread entry function to dealer, which prototype is :\nvoid* __stdcall dealerProc(void*) ";
 	}
-	if(nullptr == (dealerProcHandler = CreateThread(NULL,(DWORD)NULL,(LPTHREAD_START_ROUTINE)pDealerProc,(void*)this,(DWORD)NULL,NULL)))
+
+	if(nullptr!=pDealerProc)
 	{
-		throw L"Fail to start sub thread proc routine!";
+		if(nullptr == (dealerProcHandler = CreateThread(NULL,(DWORD)NULL,(LPTHREAD_START_ROUTINE)pDealerProc,(void*)this,(DWORD)NULL,NULL)))
+		{
+			throw L"Fail to start sub thread proc routine!";
+		}
+	}
+	else
+	{
+		if(nullptr == (dealerProcHandler = CreateThread(NULL,(DWORD)NULL,(LPTHREAD_START_ROUTINE)dealerProc,(void*)this,(DWORD)NULL,NULL)))
+		{
+			throw L"Fail to start sub thread proc routine!";
+		}
 	}
 	
 }
