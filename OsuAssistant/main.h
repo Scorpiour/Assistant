@@ -3,13 +3,16 @@
 
 #include <WinSock2.h>
 #include <windowsx.h>
+#include <windef.h>
 #include <amp.h>
 #include <cstdlib>
+#include <tchar.h>
+#include <d3d9.h>
 
 typedef class AsyncMessageBase
 {
 public:
-
+	virtual void sendbackMessage(void)=0;
 }IAsyncMessage,*pIAsyncMessage;
 
 typedef class DealerBase
@@ -33,6 +36,9 @@ public:
 
 	virtual pIAsyncMessage Dequeue_Back(void) = 0;
 	virtual pIAsyncMessage Dequeue_Front(void) = 0;
+
+	virtual pIAsyncMessage Peek_Back(void) = 0;
+	virtual pIAsyncMessage Peek_Front(void) = 0;
 
 	virtual bool Clear(void) = 0;
 	virtual UINT Size(void)const = 0;

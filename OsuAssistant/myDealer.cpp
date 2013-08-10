@@ -2,6 +2,11 @@
 
 using namespace std;
 
+void* __stdcall MyDealer::dealerProc(void* ptr)
+{
+	ExitThread((DWORD)NULL);
+}
+
 MyDealer::MyDealer(void*(*ptr)(void*))
 {
 	dealerQueue = new CommandQ();
@@ -24,7 +29,7 @@ MyDealer::MyDealer(void*(*ptr)(void*))
 	}
 	else
 	{
-		if(nullptr == (dealerProcHandler = CreateThread(NULL,(DWORD)NULL,(LPTHREAD_START_ROUTINE)dealerProc,(void*)this,(DWORD)NULL,NULL)))
+		if(nullptr == (dealerProcHandler = CreateThread(NULL,(DWORD)NULL,(LPTHREAD_START_ROUTINE)MyDealer::dealerProc,(void*)this,(DWORD)NULL,NULL)))
 		{
 			throw L"Fail to start sub thread proc routine!";
 		}
@@ -51,8 +56,10 @@ MyDealer::~MyDealer(void)
 
 bool MyDealer::sendAsyncMessage(void)
 {
+	return true;
 }
 
 bool MyDealer::acceptAsyncMessage(pIAsyncMessage)
 {
+	return true;
 }
