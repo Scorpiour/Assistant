@@ -19,11 +19,11 @@ CommandQ::~CommandQ(void)
 
 		innerQueue.clear();
 
-		ReleaseSemaphore(queueSema,(LONG)1);
+		ReleaseSemaphore(queueSema,(LONG)1,0);
 	}
 	catch(...)
 	{
-		ReleaseSemaphore(queueSema,(LONG)1);
+		ReleaseSemaphore(queueSema,(LONG)1,0);
 	}
 }
 
@@ -35,12 +35,12 @@ bool CommandQ::Enqueue_Back(pIAsyncMessage msgPtr)
 
 		innerQueue.push_back(msgPtr);
 
-		ReleaseSemaphore(queueSema,(LONG)1);
+		ReleaseSemaphore(queueSema,(LONG)1,0);
 		return true;
 	}
 	catch(...)
 	{
-		ReleaseSemaphore(queueSema,(LONG)1);
+		ReleaseSemaphore(queueSema,(LONG)1,0);
 		return false;
 	}
 }
@@ -53,12 +53,12 @@ bool CommandQ::Enqueue_Front(pIAsyncMessage msgPtr)
 
 		innerQueue.push_front(msgPtr);
 
-		ReleaseSemaphore(queueSema,(LONG)1);
+		ReleaseSemaphore(queueSema,(LONG)1,0);
 		return true;
 	}
 	catch(...)
 	{
-		ReleaseSemaphore(queueSema,(LONG)1);
+		ReleaseSemaphore(queueSema,(LONG)1,0);
 		return false;
 	}
 }
@@ -71,14 +71,20 @@ pIAsyncMessage CommandQ::Dequeue_Back(void)
 	{
 		WaitForSingleObject(queueSema,INFINITE);
 
-		msgPtr = innerQueue.back();
-		innerQueue.pop_back();
-
-		ReleaseSemaphore(queueSema,(LONG)1);
+		if(innerQueue.empty())
+		{
+			msgPtr = nullptr;
+		}
+		else
+		{
+			msgPtr = innerQueue.back();
+			innerQueue.pop_back();
+		}
+		ReleaseSemaphore(queueSema,(LONG)1,0);
 	}
 	catch(...)
 	{
-		ReleaseSemaphore(queueSema,(LONG)1);
+		ReleaseSemaphore(queueSema,(LONG)1,0);
 	}
 
 	return msgPtr;
@@ -92,14 +98,72 @@ pIAsyncMessage CommandQ::Dequeue_Front(void)
 	{
 		WaitForSingleObject(queueSema,INFINITE);
 
-		msgPtr = innerQueue.back();
-		innerQueue.pop_back();
-
-		ReleaseSemaphore(queueSema,(LONG)1);
+		if(innerQueue.empty())
+		{
+			msgPtr = nullptr;
+		}
+		else
+		{
+			msgPtr = innerQueue.front();
+			innerQueue.pop_front();
+		}
+		ReleaseSemaphore(queueSema,(LONG)1,0);
 	}
 	catch(...)
 	{
-		ReleaseSemaphore(queueSema,(LONG)1);
+		ReleaseSemaphore(queueSema,(LONG)1,0);
+	}
+
+	return msgPtr;
+}
+
+pIAsyncMessage CommandQ::Peek_Back(void)
+{
+	pIAsyncMessage msgPtr = nullptr;
+	
+	try
+	{
+		WaitForSingleObject(queueSema,INFINITE);
+
+		if(innerQueue.empty())
+		{
+			msgPtr = nullptr;
+		}
+		else
+		{
+			msgPtr = innerQueue.back();
+		}
+		ReleaseSemaphore(queueSema,(LONG)1,0);
+	}
+	catch(...)
+	{
+		ReleaseSemaphore(queueSema,(LONG)1,0);
+	}
+
+	return msgPtr;
+}
+
+pIAsyncMessage CommandQ::Peek_Front(void)
+{
+	pIAsyncMessage msgPtr = nullptr;
+	
+	try
+	{
+		WaitForSingleObject(queueSema,INFINITE);
+
+		if(innerQueue.empty())
+		{
+			msgPtr = nullptr;
+		}
+		else
+		{
+			msgPtr = innerQueue.front();
+		}
+		ReleaseSemaphore(queueSema,(LONG)1,0);
+	}
+	catch(...)
+	{
+		ReleaseSemaphore(queueSema,(LONG)1,0);
 	}
 
 	return msgPtr;
@@ -113,12 +177,12 @@ bool CommandQ::Clear(void)
 
 		innerQueue.clear();
 
-		ReleaseSemaphore(queueSema,(LONG)1);
+		ReleaseSemaphore(queueSema,(LONG)1,0);
 		return true;
 	}
 	catch(...)
 	{
-		ReleaseSemaphore(queueSema,(LONG)1);
+		ReleaseSemaphore(queueSema,(LONG)1,0);
 		return false;
 	}
 }

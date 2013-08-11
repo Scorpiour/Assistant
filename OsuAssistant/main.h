@@ -7,7 +7,7 @@
 #include <amp.h>
 #include <cstdlib>
 #include <tchar.h>
-#include <d3d9.h>
+
 
 typedef class AsyncMessageBase
 {

@@ -21,6 +21,9 @@ public:
 	virtual pIAsyncMessage Dequeue_Back(void);
 	virtual pIAsyncMessage Dequeue_Front(void);
 
+	virtual pIAsyncMessage Peek_Back(void);
+	virtual pIAsyncMessage Peek_Front(void);
+
 	virtual bool Clear(void);
 	virtual UINT Size(void)const;
 	virtual bool isEmpty(void)const;
